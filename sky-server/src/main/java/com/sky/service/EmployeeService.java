@@ -34,7 +34,7 @@ public interface EmployeeService {
      * @param status
      * @param id
      */
-    void StartOrStop(Integer status, long id);
+    void StartOrStop(Integer status, Long id);
 
 
     /**
@@ -42,7 +42,7 @@ public interface EmployeeService {
      * @param id
      * @return
      */
-    Employee getById(long id);
+    Employee getById(Long id);
 
 
     /**

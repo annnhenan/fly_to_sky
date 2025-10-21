@@ -6,3 +6,8 @@ sky:
     database: sky_take_out
     username: root
     password: Huawei12#$%
+  alioss:
+    endpoint: oss-cn-beijing.aliyuncs.com
+    access-key-id: LTAI5tP5EzzWCpC6y8iCwmhG
+    access-key-secret: uJAuup5tv4NvvfVL0nnWdU1d1B66Bx
+    bucket-name: sky-lxt-itcase

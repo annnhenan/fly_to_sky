@@ -112,13 +112,13 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         return new PageResult(total, records);
     }
-
+ 
     /**
      * 启用禁用员工账号
      * @param status
      * @param id
      */
-    public void StartOrStop(Integer status, long id) {
+    public void StartOrStop(Integer status, Long id) {
         //update employee set status = ? where id = ?
         //方法1：
 //        Employee employee = new Employee();
@@ -138,8 +138,7 @@ public class EmployeeServiceImpl implements EmployeeService {
      * @param id
      * @return
      */
-    @Override
-    public Employee getById(long id) {
+    public Employee getById(Long id) {
         Employee employee = employeeMapper.getById(id);
         employee.setPassword("****");
         return employee;

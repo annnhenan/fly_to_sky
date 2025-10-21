@@ -111,7 +111,7 @@ public class EmployeeController {
      */
     @ApiOperation("启用禁用员工账号")
     @PostMapping("/status/{status}")
-    public Result StartOrStop(@PathVariable Integer status, long id) {
+    public Result StartOrStop(@PathVariable Integer status, Long id) {
         log.info("启动禁用员工账号：{}, {}", status, id);
         employeeService.StartOrStop(status, id);
         return Result.success();
@@ -119,7 +119,7 @@ public class EmployeeController {
 
     @GetMapping("/{id}")
     @ApiOperation("根据id查询员工信息")
-    public Result<Employee> getById(@PathVariable long id){
+    public Result<Employee> getById(@PathVariable Long id){
         Employee employee = employeeService.getById(id);
         return Result.success(employee);
     }
