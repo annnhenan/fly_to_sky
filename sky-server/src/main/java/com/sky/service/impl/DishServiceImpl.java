@@ -96,12 +96,64 @@ public class DishServiceImpl implements DishService {
             throw new DeletionNotAllowedException(MessageConstant.DISH_BE_RELATED_BY_SETMEAL);
         }
         //可删除菜品，删除
-        for (Long id : ids) {
-            dishMapper.deleteByid(id);
-            //删除与菜品关联的口味数据
-            dishFlavorMapper.deleteByDishId(id);
-        }
-
+//        for (Long id : ids) {
+//            dishMapper.deleteByid(id);
+//            //删除与菜品关联的口味数据
+//            dishFlavorMapper.deleteByDishId(id);
+//        }
+        //优化，只调用一条sql就可以删除多个而不需要多个sql：delete from dish where id in (?,?,?)
+        //根据菜品id集合批量删除菜品数据
+        dishMapper.deleteByids(ids);
+        //根据菜品id集合批量删除关联的口味数据
+        dishFlavorMapper.deleteByDishIds(ids);
 
     }
+    /**
+     * 根据id查询菜品和对应的口味数据
+     * @param id
+     * @return
+     */
+    public DishVO getByIdWithFlavor(Long id){
+        //根据id查询菜品数据 -- 查询菜品表
+        Dish dish = dishMapper.getById(id);
+        //根据菜品id查询口味数据
+        List<DishFlavor> dishFlavors = dishFlavorMapper.getByDishId(id);
+        //将查询到的数据封装到vo
+        DishVO dishVO = new DishVO();
+        BeanUtils.copyProperties(dish, dishVO);
+        dishVO.setFlavors(dishFlavors);
+
+        return dishVO;
+    }
+
+    /**
+     * 根据id修改菜品基本信息及对应口味信息
+     * @param dishDTO
+     */
+    public void updateWithFlavor(DishDTO dishDTO){
+        Dish dish = new Dish();
+        BeanUtils.copyProperties(dishDTO, dish);
+
+        //修改菜品表表基本信息
+        dishMapper.update(dish);
+        //口味数据先删除再插入
+        dishFlavorMapper.deleteByDishId(dishDTO.getId());
+        List<DishFlavor> flavors = dishDTO.getFlavors();
+        if(flavors != null && flavors.size() > 0){
+            flavors.forEach(dishFlavor -> {
+                dishFlavor.setDishId(dishDTO.getId());
+            });
+            dishFlavorMapper.insertBatch(flavors);
+        }
+
+    }
+
+    public List<Dish> list(Long categoryId){
+        Dish dish = Dish.builder()
+                .categoryId(categoryId)
+                .status(StatusConstant.ENABLE)
+                .build();
+        return dishMapper.list(dish);
+    }
+
 }
