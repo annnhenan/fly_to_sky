@@ -54,4 +54,14 @@ public class ShoppingCartController {
         shoppingCartService.cleanShoppingCart();
         return Result.success();
     }
+
+    /**
+     * 删减购物车
+     */
+    @PostMapping("/sub")
+    @ApiOperation("删减购物车")
+    public Result sub(@RequestBody ShoppingCartDTO shoppingCartDTO){
+        shoppingCartService.deleteById(shoppingCartDTO);
+        return Result.success();
+    }
 }
